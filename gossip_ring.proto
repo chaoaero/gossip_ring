@@ -1,0 +1,68 @@
+import "poppy/rpc_option.proto";
+
+message VersionValue
+{
+    required string value = 1;
+    required int64 version = 2;
+}
+
+message ApplicationStateVersionEntry
+{
+    required string application_state = 1;
+    required VersionValue version_value = 2; 
+}
+
+message EndpointState
+{
+    required int64 heart_beat_state = 1;
+    repeated ApplicationStateVersionEntry a_state_version_value = 2;
+    optional int64 updateTimestamp = 3;
+    optional bool is_alive = 4 [default = false] ;
+}
+
+message GossipDigest
+{
+    required string endpoint = 1;
+    optional int64 generation = 2;
+    optional int64 max_version = 3;
+}
+
+message GossipDigestSync
+{
+    optional string from = 1;
+    repeated GossipDigest digests = 2;
+    optional string cluster_id = 3;
+    optional string partitioner = 4;
+}
+
+message EndpointStateEntry
+{
+    required string endpoint = 1;
+    optional EndpointState endpoint_state = 2;
+}
+
+message GossipDigestAck
+{
+    repeated GossipDigest digests = 1;
+    repeated EndpointStateEntry map = 2;
+    optional string from = 3;
+}
+
+message GossipDigestAck2
+{
+    repeated EndpointStateEntry map = 1;    
+    optional string from = 2;
+}
+
+message Ack2Status
+{
+    optional string from = 1;
+    optional bool succeed = 2;    
+}
+
+service GossipRingServer {
+	option (poppy.service_timeout) = 500;
+    rpc GossipDigestSynHandle(GossipDigestSync) returns(GossipDigestAck);
+    rpc GossipDigestAckHandle(GossipDigestAck2) returns(Ack2Status);
+}
+
