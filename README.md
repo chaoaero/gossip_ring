@@ -1,14 +1,5 @@
-# consistent_gossip_ring
+# Gossip and Accrual Failure Detectors Demo
 
-##Consistent Hashing
+This is the demo project about the usage of [Gossip Protocol](https://www.cs.cornell.edu/home/rvr/papers/flowgossip.pdf) and the [Accrual Failure Detectors](http://www.jaist.ac.jp/~defago/files/pdf/IS_RR_2004_010.pdf) failure detection method.
 
-First we should generate the token for nodes. There are two elegant ways:
-1. [Generate Token](https://docs.datastax.com/en/cassandra/1.2/cassandra/configuration/configGenTokens_c.html)
-```
-python -c 'print [str(((2**64 / number_of_tokens) * i) - 2**63) for i in range(number_of_tokens)]'
-```
-2. Just allocate random virtual tokens which should not equal to those were allocated for other nodes.(Cassandra just use that way) 
-
-We use the following tokens for test
-python -c 'print [str(((2**64 / 5) * i) - 2**63) for i in range(5)]'
-['-9223372036854775808', '-5534023222112865485', '-1844674407370955162', '1844674407370955161', '5534023222112865484']
+The project relys on Protocol Buffer RPC framework. While you need to use [Blade](https://github.com/chen3feng/typhoon-blade) to compile the whole project.
